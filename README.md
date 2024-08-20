@@ -112,7 +112,9 @@ Will take approximately 40 minutes to create new ds file for train.
 ## Getting Started
 Clone the repository:
 
+```bash
 git clone [INSERT LINK HERE]
+```
 
 Install dependencies:
 
