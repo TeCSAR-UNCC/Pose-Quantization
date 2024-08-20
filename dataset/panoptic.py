@@ -543,8 +543,8 @@ class Panoptic():
         condition2 = self.meta['id'] == meta['id']
         condition3 = self.meta['frame'] == meta['frame']
         fr = self.meta[condition1 & condition2 & condition3]
-        fr = fr.iloc[:self.num_camera_selection]
-        # fr = pd.concat([fr.iloc[:].sample(n=self.num_camera_selection)]) # fr.iloc[[0]], 
+        # fr = fr.iloc[:self.num_camera_selection]
+        fr = pd.concat([fr.iloc[:].sample(n=self.num_camera_selection)]) # fr.iloc[[0]], 
         # fr = fr.iloc[:].sample(n=1)
         
 
@@ -557,8 +557,8 @@ class Panoptic():
         
         confidence = np.array(self.meta.iloc[idx : idx + self.data_size]['conf'].to_list())
 
-        end_idx = 64
-        # end_idx = np.random.randint(16, high=data_3D.shape[0])
+        # end_idx = 64
+        end_idx = np.random.randint(16, high=data_3D.shape[0])
 
         data_2D = data_2D[:, : end_idx]
         data_3D = data_3D[: end_idx]
