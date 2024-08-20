@@ -1,0 +1,7 @@
+*mp4
+wandb/
+saved_models/
+*/__pycache__
+experiments/
+*.csv
+outputs/

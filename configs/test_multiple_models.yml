@@ -1,0 +1,104 @@
+configs_folder: './configs'
+experiments_folder: './experiments'
+
+# Define compression presets
+compression_presets:
+  F8: &F8
+    compression: 'F8'
+    upsample_layers: 3
+    downsample_layers: 3
+    temporal_downsample_layers: 3
+    temporal_upsample_layers: 3
+
+  F16: &F16
+    compression: 'F16'
+    upsample_layers: 4
+    downsample_layers: 4
+    temporal_downsample_layers: 4
+    temporal_upsample_layers: 4
+
+  F32: &F32
+    compression: 'F32'
+    upsample_layers: 5
+    downsample_layers: 5
+    temporal_downsample_layers: 5
+    temporal_upsample_layers: 5
+
+models:
+
+  # clear-dawn-120:
+  #   config_file: 'c2d_2d_vqgan.yml'
+  #   <<: *F8
+  #   num_codebook_vectors: 512
+  
+  # prime-dragon-117:
+  #   config_file: 'c2d_2d_vqgan.yml'
+  #   <<: *F16
+  #   num_codebook_vectors: 512
+
+  # rural-yogurt-121:
+  #   config_file: 'c2d_2d_vqgan.yml'
+  #   <<: *F32
+  #   num_codebook_vectors: 512
+
+  # swift-violet-132:
+  #   config_file: 'c2d_2d_vqgan.yml'
+  #   <<: *F16
+  #   num_codebook_vectors: 256
+
+  # valiant-sun-134:
+  #   config_file: 'c2d_2d_vqgan.yml'
+  #   <<: *F16
+  #   num_codebook_vectors: 128
+
+
+
+  # absurd-snowflake-124:
+  #   config_file: 'm2d_m2d_vqgan.yml'
+  #   <<: *F8
+  #   num_codebook_vectors: 1024
+
+  # cerulean-yogurt-114:
+  #   config_file: 'm2d_m2d_vqgan.yml'
+  #   <<: *F16
+  #   num_codebook_vectors: 1024
+
+  # generous-breeze-100:
+  #   config_file: 'm2d_m2d_vqgan.yml'
+  #   <<: *F8
+  #   num_codebook_vectors: 512
+
+  # clear-night-128:
+  #   config_file: 'm2d_m2d_vqgan.yml'
+  #   <<: *F8
+  #   num_codebook_vectors: 256
+
+
+
+  # snowy-microwave-113:
+  #   config_file: '3d_3d_vqgan.yml'
+  #   <<: *F8
+  #   num_codebook_vectors: 1024
+  
+  # morning-snowflake-127:
+  #   config_file: '3d_3d_vqgan.yml'
+  #   <<: *F32
+  #   num_codebook_vectors: 1024
+
+  celestial-wood-139:
+    config_file: '3d_3d_vqgan.yml'
+    <<: *F16
+    num_codebook_vectors: 1024
+
+  # charmed-violet-103:
+  #   config_file: '3d_3d_vqgan.yml'
+  #   <<: *F16
+  #   num_codebook_vectors: 512
+
+  # jolly-aardvark-99:
+  #   config_file: '3d_3d_vqgan.yml'
+  #   <<: *F16
+  #   num_codebook_vectors: 256
+
+
+# CUDA_VISIBLE_DEVICES=0 python test.py

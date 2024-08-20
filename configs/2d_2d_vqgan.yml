@@ -1,0 +1,55 @@
+architecture:
+  input_recon: "2d_2d"
+  vqgan:
+    in_channels: 1
+    out_channels: 1
+    discriminator_channels: 1
+    img_size: 128
+    latent_channels: 256
+    latent_size: 16
+    intermediate_channels: [64, 64, 128, 128, 256]
+    num_residual_blocks_encoder: 2
+    num_residual_blocks_decoder: 3
+    dropout: 0.0
+    attention_resolution: [16]
+    num_codebook_vectors: 1024
+
+
+trainer:
+  vqgan:
+    learning_rate: 2.25e-05
+    beta1: 0.5
+    beta2: 0.9
+    perceptual_loss_factor: 1.0
+    rec_loss_factor: 1.0
+    disc_factor: 0.5
+    disc_start: 24000
+    perceptual_model: "vgg"
+    save_every: 1000
+
+
+dataset:
+  name: 'panoptic'
+  root: '/home/gmaldon2/panoptic-toolbox/data/'
+  data_size: 300
+  window_size: &dws 64 # Dataset Window Size
+  frame_interval: 1
+  stride: 90
+  joint_req: 0.9
+  camera_num: 10
+  resolution: [1920, 1080]
+  num_camera_selection: 1
+  max_combine: true
+
+  # Heatmap Generator
+  hm2d: true
+  hm3d: false
+  heatmap_generator:
+    use_gaussian_score: true
+    with_limb: true
+    with_kp: false
+    sigma: 0.75
+    heatmap_size: &hms 128 # Heatmap Size
+    scaling: 1.0
+
+resume: ''
