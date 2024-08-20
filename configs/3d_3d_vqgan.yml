@@ -54,6 +54,6 @@ dataset:
     heatmap_size: &hms 128 # Heatmap Size
     scaling: 1.0
 
-resume: 'experiments/celestial-wood-139/3dvqgan_e0_celestial-wood-139.pt'
+resume: ''
 
 # CUDA_VISIBLE_DEVICES=0 python train.py --cfg configs/3d_3d_vqgan.yml

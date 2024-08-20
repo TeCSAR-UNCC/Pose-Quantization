@@ -85,7 +85,7 @@ models:
   #   <<: *F32
   #   num_codebook_vectors: 1024
 
-  celestial-wood-139:
+  hearty-universe-142:
     config_file: '3d_3d_vqgan.yml'
     <<: *F16
     num_codebook_vectors: 1024

@@ -57,7 +57,7 @@ dataset:
     heatmap_size: &hms 128 # Heatmap Size
     scaling: 1.0
 
-resume: 'experiments/sandy-jazz-107/3dvqgan_e9_sandy-jazz-107.pt'
+resume: ''
 
 
 # CUDA_VISIBLE_DEVICES=2 python train.py --cfg configs/c2d_2d_vqgan.yml

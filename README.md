@@ -25,12 +25,22 @@ The experiments demonstrate the effectiveness of this approach across different 
 ## Model Performance Summary
 
 | Model Type         | Compression | Vocab Size | SSIM↑ | PSNR↑ | L1↓ | T-Std↓ | Q-Loss↓ |
-|-------------------|-------------|------------|-------|-------|------|--------|---------|
-| Single Egocentric | F8          | 512        | 0.975 | 31.23 | 0.005| 0.212  | 0.0013  |
-| Single Egocentric | F16         | 512        | 0.950 | 28.06 | 0.008| 0.217  | 0.0033  |
-| Single Egocentric | F16         | 256        | 0.953 | 28.30 | 0.008| 0.217  | 0.0034  |
-| Multi Exocentric  | F8          | 1024       | 0.921 | 25.37 | 0.011| 0.230  | 0.0037  |
-| 3D Projection     | F8          | 1024       | 0.934 | 31.65 | 0.005| 0.151  | 0.0014  |
+|--------------------|-------------|------------|-------|-------|------|---------|----------|
+| Single Egocentric  | F8          | 512        | 0.975 | 31.23 | 0.005 | 0.212   | 0.0013   |
+| Single Egocentric  | F16         | 512        | 0.950 | 28.06 | 0.008 | 0.217   | 0.0033   |
+| Single Egocentric  | F16         | 256        | 0.954 | 28.39 | 0.007 | 0.219   | 0.0008   |
+| Single Egocentric  | F16         | 128        | 0.954 | 28.30 | 0.007 | 0.220   | 0.0003   |
+| Single Egocentric  | F32         | 512        | 0.913 | 25.28 | 0.011 | 0.222   | 0.0009   |
+| Multi Exocentric   | F8          | 1024       | 0.921 | 25.37 | 0.011 | 0.219   | 0.0015   |
+| Multi Exocentric   | F8          | 512        | 0.913 | 26.19 | 0.010 | 0.221   | 0.0014   |
+| Multi Exocentric   | F8          | 256        | 0.912 | 25.07 | 0.012 | 0.217   | 0.0033   |
+| Multi Exocentric   | F16         | 1024       | 0.518 | 19.42 | 0.057 | 0.236   | 0.0034   |
+| 3D Projection      | F8          | 1024       | 0.934 | 31.65 | 0.005 | 0.210   | 0.0009   |
+| 3D Projection      | F16         | 1024       | 0.912 | 28.45 | 0.008 | 0.237   | 0.0010   |
+| 3D Projection      | F16         | 512        | 0.866 | 27.21 | 0.009 | 0.219   | 0.0010   |
+| 3D Projection      | F16         | 256        | 0.866 | 27.01 | 0.009 | 0.219   | 0.0010   |
+| 3D Projection      | F32         | 1024       | 0.858 | 26.53 | 0.011 | 0.225   | 0.0001   |
+
 
 ## Training the Model
 
@@ -46,8 +56,8 @@ python train.py --cfg configs/3d_3d_vqgan.yml
 The configuration files are located in the configs/ directory. These files allow you to adjust key features like compression rate, number of codebook vectors, and other hyperparameters.
 
 You can change:
-- Compression Rate: Adjust how much data is compressed (e.g., F8, F16, F32).
-- Number of Codebook Vectors: Control the size of the latent space.
+- **Compression Rate**: Adjust how much data is compressed (e.g., F8, F16, F32).
+- **Number of Codebook** Vectors: Control the size of the latent space.
 
 To resume training, specify the path to your checkpoint file in the configuration under resume. For example:
 
