@@ -81,7 +81,7 @@ models:
 
 root: '/home/gmaldon2/panoptic-toolbox/data/'
 
-3. Replace the bash files in the panoptic toolbox with the files located in \panoptic_sh\ to extract only keypoint data.
+3. Replace the bash files in the panoptic toolbox with the files located in .\panoptic_sh to extract only keypoint data.
 4. The correct files should be generated automatically when you run the code for the first time.
 
 ### Dataset Structure
@@ -97,16 +97,22 @@ The directory structure should look like this:
         |-- ...
 ```
 
+Will take approximately 40 minutes to create new ds file for train.
+
 ## Getting Started
 Clone the repository:
 
-git clone https://github.com/your-username/your-repository.git
+git clone [INSERT LINK HERE]
 
 Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+Download CMU Panoptic dataset:
+
+Follow the 'Setting Up the CMU Panoptic Dataset' section
 
 Run the experiments:
 
