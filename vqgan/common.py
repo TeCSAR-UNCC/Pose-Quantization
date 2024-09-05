@@ -121,12 +121,19 @@ class UpsampleBlock(nn.Module):
         in_channels (int): Number of channels in the input tensor.
     """
 
-    def __init__(self, in_channels:int, not_temporal:bool) -> None:
+    def __init__(self, in_channels:int, not_temporal:bool, reduce_temporal:bool, n:int) -> None:
         super().__init__()
         kernel_size=(3,3,3)
         stride=(1,1,1)
         padding=(1,1,1)
-        self.scale_factor = (1.0, 2.0, 2.0) if not_temporal else 2.0
+        self.scale_factor = (2.0, 2.0, 2.0) 
+        if not_temporal:
+            self.scale_factor = (1.0, 2.0, 2.0) 
+
+        elif reduce_temporal: # Works only with F8 48 Frames
+            self.scale_factor = (4.0, 2.0, 2.0)
+            if n == 3:
+                self.scale_factor = (3.0, 2.0, 2.0)
 
         self.conv = nn.Conv3d(
             in_channels, in_channels, kernel_size=kernel_size, stride=stride, padding=padding

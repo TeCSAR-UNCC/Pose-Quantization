@@ -1,3 +1,25 @@
+compression_presets:
+  F8: &F8
+    compression: 'F8'
+    upsample_layers: 3
+    downsample_layers: 3
+    temporal_downsample_layers: 3
+    temporal_upsample_layers: 3
+
+  F16: &F16
+    compression: 'F16'
+    upsample_layers: 4
+    downsample_layers: 4
+    temporal_downsample_layers: 4
+    temporal_upsample_layers: 4
+
+  F32: &F32
+    compression: 'F32'
+    upsample_layers: 5
+    downsample_layers: 5
+    temporal_downsample_layers: 5
+    temporal_upsample_layers: 5
+
 architecture:
   input_recon: "m2d_m2d"
   vqgan:
@@ -10,10 +32,8 @@ architecture:
     intermediate_channels: [64, 64, 128, 128, 256]
     num_residual_blocks_encoder: 2
     num_residual_blocks_decoder: 3
-    upsample_layers: 3
-    downsample_layers: 3
-    temporal_downsample_layers: 3
-    temporal_upsample_layers: 3
+    reduce_temporal: False # Only works with F8
+    <<: *F8
     dropout: 0.0
     attention_resolution: [16]
     num_codebook_vectors: 1024
