@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Importing Libraries
 import argparse
 from easydict import EasyDict as edict
@@ -13,13 +14,12 @@ from vqgan import VQGAN
 
 # WANDB_MODE=offline CUDA_VISIBLE_DEVICES=0 python train.py --cfg configs/m2d_m2d_vqgan.yml
 def main(args, config):
-     
+
     model_config = dict(
         num_tokens=config.architecture.vqgan,
         num_codebook_vectors=config.architecture.vqgan.num_codebook_vectors,
         num_residual_blocks_encoder=config.architecture.vqgan.num_residual_blocks_encoder,
         num_residual_blocks_decoder=config.architecture.vqgan.num_residual_blocks_decoder,
-        
     )
 
     run = wandb.init(
@@ -32,7 +32,6 @@ def main(args, config):
     if config.resume:
         vqgan.load_checkpoint(config.resume)
 
-
     ds = eval("dataset." + config.dataset.name)(**config.dataset, is_training=True)
     dl_train = DataLoader(
         dataset=ds,
@@ -42,7 +41,7 @@ def main(args, config):
         pin_memory=True,
         persistent_workers=(0 > 0),
     )
-    model_input, model_recon = config.architecture.input_recon.split('_')
+    model_input, model_recon = config.architecture.input_recon.split("_")
 
     trainer = Trainer(
         model_config=config.architecture.vqgan,

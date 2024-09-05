@@ -1,59 +1,61 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "vq_tester",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "test_vqgan.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Test 3D_VQGAN",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "./test.py",
-            "console": "integratedTerminal", 
-            "env": {
-              "CUDA_VISIBLE_DEVICES": "0",
-              "WANDB_MODE": "offline"
-            }
-        },
-        {
-            "name": "Train 3D_VQGAN",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "train.py",
-            "console": "integratedTerminal",
-            "env": {
-              "CUDA_VISIBLE_DEVICES": "0",
-              "WANDB_MODE": "offline"
-            }
-        },
-        {
-            "name": "train1",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "train1.py",
-            "console": "integratedTerminal",
-            "env": {
-              "CUDA_VISIBLE_DEVICES": "2",
-              "WANDB_MODE": "offline"
-            }
-        },
-        {
-          "name": "output models",
-          "type": "debugpy",
-          "request": "launch",
-          "program": "output_models.py",
-          "console": "integratedTerminal",
-          "env": {
-            "CUDA_VISIBLE_DEVICES": "0",
-            "WANDB_MODE": "offline"
-          }
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "vq_tester",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "test_vqgan.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Test 3D_VQGAN",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "./test.py",
+      "console": "integratedTerminal",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "WANDB_MODE": "offline"
+      },
+      "args": ["--cfg", "configs/test_multiple_models.yml"]
+    },
+    {
+      "name": "Train 3D_VQGAN",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "train.py",
+      "console": "integratedTerminal",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "WANDB_MODE": "offline"
+      },
+      "args": ["--cfg", "configs/c2d_2d_vqgan.yml"]
+    },
+    {
+      "name": "train1",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "train1.py",
+      "console": "integratedTerminal",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "2",
+        "WANDB_MODE": "offline"
       }
-    ]
+    },
+    {
+      "name": "output models",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "output_models.py",
+      "console": "integratedTerminal",
+      "env": {
+        "CUDA_VISIBLE_DEVICES": "0",
+        "WANDB_MODE": "offline"
+      }
+    }
+  ]
 }

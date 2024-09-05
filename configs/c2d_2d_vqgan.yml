@@ -34,7 +34,7 @@ trainer:
 
 dataset:
   name: 'panoptic'
-  root: '/home/gmaldon2/panoptic-toolbox/data/'
+  root: '/mnt/DATASETS_RAID_28TB/panoptic-toolbox/data/'
   data_size: 300
   window_size: &dws 64 # Dataset Window Size
   frame_interval: 1

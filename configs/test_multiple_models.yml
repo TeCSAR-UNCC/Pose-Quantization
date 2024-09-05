@@ -1,5 +1,5 @@
-configs_folder: './configs'
-experiments_folder: './experiments'
+configs_folder: './configs/'
+experiments_folder: '/mnt/DATASETS_RAID_28TB/VQ_VAN/experiments'
 
 # Define compression presets
 compression_presets:
@@ -26,10 +26,10 @@ compression_presets:
 
 models:
 
-  # clear-dawn-120:
-  #   config_file: 'c2d_2d_vqgan.yml'
-  #   <<: *F8
-  #   num_codebook_vectors: 512
+  clear-dawn-120:
+    config_file: 'c2d_2d_vqgan.yml'
+    <<: *F8
+    num_codebook_vectors: 512
   
   # prime-dragon-117:
   #   config_file: 'c2d_2d_vqgan.yml'
@@ -85,10 +85,10 @@ models:
   #   <<: *F32
   #   num_codebook_vectors: 1024
 
-  hearty-universe-142:
-    config_file: '3d_3d_vqgan.yml'
-    <<: *F16
-    num_codebook_vectors: 1024
+  # hearty-universe-142:
+  #   config_file: '3d_3d_vqgan.yml'
+  #   <<: *F16
+  #   num_codebook_vectors: 1024
 
   # charmed-violet-103:
   #   config_file: '3d_3d_vqgan.yml'

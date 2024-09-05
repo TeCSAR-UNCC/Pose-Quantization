@@ -92,10 +92,12 @@ VALIDATION_LIST = [
 
 CAMERA_LIST_EXO = [1, 2, 4, 6, 7, 10, 13, 17, 19, 28]
 CAMERA_LIST_EGO = [0, 3, 5, 8, 9, 14, 15, 23, 24, 25]
-CAMERA_LIST_EXO_TRIPLES = [["00_01","00_04","00_07"],
-                           ["00_17","00_28","00_13"],
-                           ["00_02","00_06","00_19"],
-                           ["00_10","00_17","00_28"]]
+CAMERA_LIST_EXO_TRIPLES = [
+    ["00_01", "00_04", "00_07"],
+    ["00_17", "00_28", "00_13"],
+    ["00_02", "00_06", "00_19"],
+    ["00_10", "00_17", "00_28"],
+]
 
 JOINTS_DEF = {
     "neck": 0,
@@ -167,26 +169,27 @@ LEFT_LIMB = (3, 4, 5, 6, 7, 8)
 RIGHT_LIMB = (9, 10, 11, 12, 13, 14)
 
 
-class Panoptic():
-    def __init__(self, 
-                root="",
-                stride=15,
-                joint_req=0.9,
-                camera_num=10,
-                data_size=300,
-                window_size=48,
-                frame_interval=1,
-                perspective_ego=False,
-                resolution=[1920, 1080],
-                is_training=True,
-                hm2d=True,
-                hm3d=True,
-                num_camera_selection=3,
-                max_combine=True,
-                heatmap_generator={},
-                 **kwargs
-                 ):
-        
+class Panoptic:
+    def __init__(
+        self,
+        root="",
+        stride=15,
+        joint_req=0.9,
+        camera_num=10,
+        data_size=300,
+        window_size=48,
+        frame_interval=1,
+        perspective_ego=False,
+        resolution=[1920, 1080],
+        is_training=True,
+        hm2d=True,
+        hm3d=True,
+        num_camera_selection=3,
+        max_combine=True,
+        heatmap_generator={},
+        **kwargs,
+    ):
+
         this_dir = os.path.dirname(__file__)
         self.dataset_root = root
         if isinstance(root, str):
@@ -195,7 +198,7 @@ class Panoptic():
 
         self.stride = stride
         self.joint_req = joint_req
-        self.image_set = 'train' if is_training else 'validation'
+        self.image_set = "train" if is_training else "validation"
         self.num_views = camera_num
         self.resolution = resolution
         self.window_size = window_size
@@ -243,10 +246,12 @@ class Panoptic():
         self.sequence_list = eval(self.image_set.upper() + "_LIST")
         self.cam_list = CAMERA_LIST_EGO if perspective_ego else CAMERA_LIST_EXO
         self.cam_list = [(0, i) for i in self.cam_list]
-        self.cam_type = 'ego' if perspective_ego else 'exo'
+        self.cam_type = "ego" if perspective_ego else "exo"
         self.num_views = len(self.cam_list)
 
-        self.db_file = f"3D_group_{self.image_set}_cam{self.num_views}{self.cam_type}_300.pkl"
+        self.db_file = (
+            f"3D_group_{self.image_set}_cam{self.num_views}{self.cam_type}_300.pkl"
+        )
         # print(f"Using {self.db_file}")
         self.db_file = os.path.join(self.dataset_root, self.db_file)
 
@@ -270,7 +275,7 @@ class Panoptic():
                 "data3D": self.db3d,
                 "meta": self.meta,
                 "meta3D": self.meta_3D,
-                "dist": self.differences
+                "dist": self.differences,
             }
             pickle.dump(info, open(self.db_file, "wb"))
 
@@ -306,13 +311,13 @@ class Panoptic():
 
                 if len(bodies) == 0:
                     continue
-                
+
                 for k, v in cameras.items():
                     postfix = osp.basename(b_file).replace("body3DScene", "")
                     prefix = "{:02d}_{:02d}".format(k[0], k[1])
 
                     for body in bodies:
-                        
+
                         frame = postfix[1:-5]
                         full_id = f"{prefix}{body['id']}"
                         pose3d = np.array(body["joints19"]).reshape((-1, 4))
@@ -355,20 +360,29 @@ class Panoptic():
 
                         if seq not in db_3D.keys():
                             db_3D[seq] = {}
-                        if body['id'] not in db_3D[seq].keys():
-                            db_3D[seq][body['id']] = {}
-                        if frame not in db_3D[seq][body['id']].keys():
-                            db_3D[seq][body['id']][frame] = {'pose':pose3d, 'cameras': 1}
+                        if body["id"] not in db_3D[seq].keys():
+                            db_3D[seq][body["id"]] = {}
+                        if frame not in db_3D[seq][body["id"]].keys():
+                            db_3D[seq][body["id"]][frame] = {
+                                "pose": pose3d,
+                                "cameras": 1,
+                            }
                         else:
-                            db_3D[seq][body['id']][frame]['cameras'] += 1
+                            db_3D[seq][body["id"]][frame]["cameras"] += 1
 
-                        if body['id'] not in prev_pose3d.keys():
-                            prev_pose3d[body['id']] = copy.deepcopy(pose3d)
+                        if body["id"] not in prev_pose3d.keys():
+                            prev_pose3d[body["id"]] = copy.deepcopy(pose3d)
 
-                        difference = int(max(np.linalg.norm(pose3d - prev_pose3d[body['id']], axis=1)))
-                        self.differences[difference] = self.differences.get(difference, 0) + 1
+                        difference = int(
+                            max(
+                                np.linalg.norm(pose3d - prev_pose3d[body["id"]], axis=1)
+                            )
+                        )
+                        self.differences[difference] = (
+                            self.differences.get(difference, 0) + 1
+                        )
 
-                        prev_pose3d[body['id']] = copy.deepcopy(pose3d)
+                        prev_pose3d[body["id"]] = copy.deepcopy(pose3d)
 
                         if len(pose2d) > 0:
                             db.append(
@@ -382,7 +396,7 @@ class Panoptic():
                                 }
                             )
         self.show_joint_delta_distribution()
-        
+
         db = sorted(db, key=lambda x: (x["video"], x["id"], int(x["camera"])))
 
         valid_frames = []
@@ -396,22 +410,23 @@ class Panoptic():
                 range_of = list(range(start, start + length - self.window_size))
                 valid_frames.extend(range_of)
                 start += length
-                
-                for frame_id, frame in frames.items():
-                    all_3D_poses.append(frame['pose'])
-                    if frame['cameras'] < 4:
-                        removal.append(len(all_3D_poses)-1)
 
-                # Append the data for the current (seq, body_id) to the list
-                    meta_3D.append({
-                        'video': seq,
-                        'id': body_id,
-                        'frame': frame_id,
-                        'cameras': frame['cameras']
-                    })
+                for frame_id, frame in frames.items():
+                    all_3D_poses.append(frame["pose"])
+                    if frame["cameras"] < 4:
+                        removal.append(len(all_3D_poses) - 1)
+
+                    # Append the data for the current (seq, body_id) to the list
+                    meta_3D.append(
+                        {
+                            "video": seq,
+                            "id": body_id,
+                            "frame": frame_id,
+                            "cameras": frame["cameras"],
+                        }
+                    )
 
         valid_frames = [x for x in valid_frames if x not in removal]
-
 
         meta_db = pd.DataFrame(
             [{k: v for k, v in d.items() if k != "joints_2d"} for d in db]
@@ -423,12 +438,20 @@ class Panoptic():
         skel_array = np.array([i["joints_2d"] for i in db])
         unique_combinations = meta_db[["video", "camera", "id"]].drop_duplicates()
 
-        return valid_frames, skel_array, all_3D_poses, meta_db, meta_3D, unique_combinations
+        return (
+            valid_frames,
+            skel_array,
+            all_3D_poses,
+            meta_db,
+            meta_3D,
+            unique_combinations,
+        )
 
-
-    def show_joint_delta_distribution(self,):
+    def show_joint_delta_distribution(
+        self,
+    ):
         # Extract keys and values
-        
+
         for i in range(50):
             self.differences[i] = 0
 
@@ -440,15 +463,15 @@ class Panoptic():
         plt.bar(x, y)
 
         # Labeling the axes
-        plt.xlabel('Integer Values')
-        plt.ylabel('Frequency')
-        plt.title('Logarithmic Frequency Distribution of Integer Values')
+        plt.xlabel("Integer Values")
+        plt.ylabel("Frequency")
+        plt.title("Logarithmic Frequency Distribution of Integer Values")
 
         # Set y-axis to logarithmic scale
-        plt.yscale('log')
+        plt.yscale("log")
 
         # Save the plot to a file
-        plt.savefig(f'logarithmic_frequency_distribution_{self.image_set}.png')
+        plt.savefig(f"logarithmic_frequency_distribution_{self.image_set}.png")
 
         # Optionally display the plot in the notebook (if you're using one)
         # plt.show()
@@ -471,18 +494,20 @@ class Panoptic():
                 sel_cam["t"] = np.array(cam["t"]).reshape((3, 1))
                 cameras[(cam["panel"], cam["node"])] = sel_cam
         return cameras
-    
+
     def compress_3d_heatmap(self, heatmap):
         # Permute to change the dimensions to (depth, height, width, channels)
         percep_gt = heatmap.permute(1, 2, 3, 0)
-        
+
         # Max across each axis
         max_x = torch.max(percep_gt, dim=1)[0]  # Max across x axis
         max_y = torch.max(percep_gt, dim=2)[0]  # Max across y axis
         max_z = torch.max(percep_gt, dim=3)[0]  # Max across z axis
 
         # Stack them together
-        heatmap_xyz = torch.stack([max_x, max_y, max_z], dim=0)  # (3, depth, height, width)
+        heatmap_xyz = torch.stack(
+            [max_x, max_y, max_z], dim=0
+        )  # (3, depth, height, width)
 
         return heatmap_xyz
 
@@ -498,14 +523,13 @@ class Panoptic():
     #     expanded_heatmap = expanded_heatmap.permute(3, 0, 1, 2)
 
     #     return expanded_heatmap
-    
+
     def calculate_rotation_angle(self, data_3D):
         l_shoulder = data_3D[JOINTS_DEF["l-shoulder"]]
         r_shoulder = data_3D[JOINTS_DEF["r-shoulder"]]
         shoulder_vector = r_shoulder - l_shoulder
         angle = np.arctan2(shoulder_vector[2], shoulder_vector[0])
         return angle
-
 
     def straighten_by_initial_frame(self, data_3D):
         def rotate_skeleton(skeleton, rotation_matrix):
@@ -514,39 +538,35 @@ class Panoptic():
         def get_rotation_matrix_y(angle):
             cos_a = np.cos(angle)
             sin_a = np.sin(angle)
-            return np.array([
-                [cos_a, 0, sin_a],
-                [0, 1, 0],
-                [-sin_a, 0, cos_a]
-            ])
+            return np.array([[cos_a, 0, sin_a], [0, 1, 0], [-sin_a, 0, cos_a]])
 
         initial_frame = data_3D[0]
         angle = self.calculate_rotation_angle(initial_frame)
         rotation_matrix = get_rotation_matrix_y(-angle)
-        
-        rotated_data_3D = np.array([
-            rotate_skeleton(frame, rotation_matrix) for frame in data_3D
-        ])
-        
+
+        rotated_data_3D = np.array(
+            [rotate_skeleton(frame, rotation_matrix) for frame in data_3D]
+        )
+
         return rotated_data_3D
 
     def __len__(self):
         return self.vf_size // self.stride
-
 
     def __getitem__(self, index):
         idx = self.vf[:: self.stride][index]
         data_3D = self.db3d[idx : idx + self.data_size]
         meta = self.meta_3D.iloc[idx]
 
-        condition1 = self.meta['video'].str.contains(meta['video'])
-        condition2 = self.meta['id'] == meta['id']
-        condition3 = self.meta['frame'] == meta['frame']
+        condition1 = self.meta["video"].str.contains(meta["video"])
+        condition2 = self.meta["id"] == meta["id"]
+        condition3 = self.meta["frame"] == meta["frame"]
         fr = self.meta[condition1 & condition2 & condition3]
         # fr = fr.iloc[:self.num_camera_selection]
-        fr = pd.concat([fr.iloc[:].sample(n=self.num_camera_selection)]) # fr.iloc[[0]], 
+        fr = pd.concat(
+            [fr.iloc[:].sample(n=self.num_camera_selection)]
+        )  # fr.iloc[[0]],
         # fr = fr.iloc[:].sample(n=1)
-        
 
         data_2D = np.zeros((len(fr), self.data_size, len(self.joints_def), 2))
         try:
@@ -554,18 +574,22 @@ class Panoptic():
                 data_2D[i] = self.db[index : index + self.data_size]
         except:
             data_2D = np.zeros((len(fr), self.data_size, len(self.joints_def), 2))
-        
-        confidence = np.array(self.meta.iloc[idx : idx + self.data_size]['conf'].to_list())
+
+        confidence = np.array(
+            self.meta.iloc[idx : idx + self.data_size]["conf"].to_list()
+        )
 
         # end_idx = 64
         end_idx = np.random.randint(16, high=data_3D.shape[0])
 
-        data_2D = data_2D[:, : end_idx]
-        data_3D = data_3D[: end_idx]
-        confidence = confidence[: end_idx]
+        data_2D = data_2D[:, :end_idx]
+        data_3D = data_3D[:end_idx]
+        confidence = confidence[:end_idx]
 
-        data_2D, data_3D, confidence = uniform_sample_frames_multi(data_2D, data_3D, confidence, self.window_size)
-        
+        data_2D, data_3D, confidence = uniform_sample_frames_multi(
+            data_2D, data_3D, confidence, self.window_size
+        )
+
         if self.hm2d and self.hm3d:
             data_3D = self.straighten_by_initial_frame(data_3D=data_3D)
 
@@ -576,13 +600,14 @@ class Panoptic():
             heatmap_2D = torch.tensor(heatmap_2D)
 
         if self.heatmap_generator_3D is not None:
-            heatmap_3D, kpts = self.heatmap_generator_3D(np.expand_dims(data_3D, axis=0), confidence)
+            heatmap_3D, kpts = self.heatmap_generator_3D(
+                np.expand_dims(data_3D, axis=0), confidence
+            )
             heatmap_3D = torch.tensor(heatmap_3D).permute(3, 0, 1, 2)
             heatmap_3D = self.compress_3d_heatmap(heatmap_3D)
 
-        
         # new_heatmap_3D = self.expand_compressed_3d_heatmap(compressed_heatmap_3D, original_shape=heatmap_3D.shape)
-        
+
         heatmap_2D = torch.nan_to_num(heatmap_2D, nan=0.0)
         heatmap_3D = torch.nan_to_num(heatmap_3D, nan=0.0)
 
