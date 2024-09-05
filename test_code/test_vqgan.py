@@ -17,7 +17,7 @@ def test_encoder():
     frame_length = 64
     attn_resolution = 16
     latent_size_frames = 8
-    concat_channels = True
+    # concat_channels = True
 
     image = torch.randn(1, 1, frame_length, image_size, image_size*camera_channels)
 
@@ -26,7 +26,7 @@ def test_encoder():
         image_size=image_size,
         latent_channels=latent_channels,
         attention_resolution=[attn_resolution],
-        concat_channels=concat_channels
+        # concat_channels=concat_channels
     )
 
     output = model(image)

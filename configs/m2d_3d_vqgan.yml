@@ -17,7 +17,6 @@ architecture:
     dropout: 0.0
     attention_resolution: [16]
     num_codebook_vectors: 1024
-    concat_channels: false
     num_unireplk_blocks: 0
     notes: 'more tmp'
 

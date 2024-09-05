@@ -48,7 +48,7 @@ class VQGAN(nn.Module):
         dropout: float = 0.0,
         attention_resolution: list = [16],
         num_codebook_vectors: int = 1024,
-        concat_channels: bool = False,
+        reduce_temporal: bool = False,
         num_unireplk_blocks: int = 0,
         **kwagrs
     ):
@@ -59,7 +59,7 @@ class VQGAN(nn.Module):
         self.out_channels = out_channels
         self.discriminator_channels = discriminator_channels
         self.num_codebook_vectors = num_codebook_vectors
-        self.concat_channels = concat_channels
+        self.reduce_temporal = reduce_temporal
 
         self.encoder = Encoder(
             img_channels=in_channels,
@@ -69,7 +69,7 @@ class VQGAN(nn.Module):
             num_residual_blocks=num_residual_blocks_encoder,
             dropout=dropout,
             attention_resolution=attention_resolution,
-            concat_channels=self.concat_channels,
+            reduce_temporal=self.reduce_temporal,
             num_unireplk_blocks=num_unireplk_blocks,
             downsample_layers=downsample_layers,
             temporal_downsample_layers=temporal_downsample_layers,
@@ -83,6 +83,7 @@ class VQGAN(nn.Module):
             num_residual_blocks=num_residual_blocks_decoder,
             dropout=dropout,
             attention_resolution=attention_resolution,
+            reduce_temporal=self.reduce_temporal,
             upsample_layers=upsample_layers,
             temporal_upsample_layers=temporal_upsample_layers,
         )
@@ -102,8 +103,8 @@ class VQGAN(nn.Module):
         Returns:
             torch.Tensor: Output tensor from the decoder.
         """
-        if self.concat_channels:
-            x = torch.cat(torch.split(x, 1, dim=1), dim=-1)
+        # if self.concat_channels:
+        #     x = torch.cat(torch.split(x, 1, dim=1), dim=-1)
 
         encoded_images = self.encoder(x)
         quant_x = self.quant_conv(encoded_images)

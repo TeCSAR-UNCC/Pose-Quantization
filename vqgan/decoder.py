@@ -37,6 +37,7 @@ class Decoder(nn.Module):
         latent_size: int = 16,
         intermediate_channels: list = [128, 128, 256, 256, 512],
         upsample_layers: int = 3,
+        reduce_temporal: bool = False,
         temporal_upsample_layers: int = 3,
         num_residual_blocks: int = 3,
         dropout: float = 0.0,
@@ -90,7 +91,9 @@ class Decoder(nn.Module):
             if n != 0 and added_upsample < upsample_layers:
 
                 self.layers.append(UpsampleBlock(in_channels=in_channels, 
-                                                   not_temporal=n > temporal_upsample_layers)
+                                                   not_temporal=n > temporal_upsample_layers,
+                                                   reduce_temporal=reduce_temporal,
+                                                   n=n)
                                                    )
                 # self.layers.append(UpsampleBlock(in_channels=in_channels))
                 latent_size = latent_size * 2  # Upsample by a factor of 2

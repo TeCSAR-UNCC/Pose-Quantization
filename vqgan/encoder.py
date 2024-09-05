@@ -39,7 +39,7 @@ class Encoder(nn.Module):
         attention_resolution: list = [16],
         downsample_layers: int = 3,
         temporal_downsample_layers: int = 3,
-        concat_channels: bool = False,
+        reduce_temporal: bool = False,
         num_unireplk_blocks: int = 0, 
     ):
         super().__init__()
@@ -49,7 +49,6 @@ class Encoder(nn.Module):
 
         # Appends all the layers to this list
         self.layers = []
-        img_channels = img_channels if not concat_channels else 1
 
         # Addingt the first conv layer increase input channels to the first intermediate channels
         self.layers.append(
@@ -86,10 +85,10 @@ class Encoder(nn.Module):
                 stride = (2, 2, 2)
                 padding = (0, 0, 0)
 
-                if concat_channels:
-                    kernel = (3, 3, 4)
-                    stride = (2, 2, 3)
-                    padding = (0, 0, 2)
+                if reduce_temporal:
+                    kernel = (3, 3, 3)
+                    stride = (4, 2, 2)
+                    padding = (0, 0, 0)
 
                 # Adjust for temporal_downsample_layers
                 if n >= temporal_downsample_layers:
