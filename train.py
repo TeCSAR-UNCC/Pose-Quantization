@@ -35,7 +35,7 @@ def main(args, config):
     ds = eval("dataset." + config.dataset.name)(**config.dataset, is_training=True)
     dl_train = DataLoader(
         dataset=ds,
-        batch_size=1,
+        batch_size=config.dataset.batch_size,
         shuffle=True,
         num_workers=4,
         pin_memory=True,

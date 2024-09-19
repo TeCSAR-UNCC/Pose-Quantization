@@ -26,7 +26,7 @@ architecture:
     in_channels: 17
     out_channels: 1
     discriminator_channels: 1
-    img_size: 128
+    img_size: &img_size 72
     latent_channels: 256
     latent_size: 16
     intermediate_channels: [64, 64, 128, 128, 256]
@@ -64,7 +64,9 @@ dataset:
   resolution: [1920, 1080]
   num_camera_selection: 1
   max_combine: false
-  perspective_ego: true
+  perspective_ego: false
+  heatmap_size: *img_size
+  batch_size: 8
 
   # Heatmap Generator
   hm2d: true
@@ -73,8 +75,8 @@ dataset:
     use_gaussian_score: true
     with_limb: true
     with_kp: false
-    sigma: 0.75
-    heatmap_size: &hms 128 # Heatmap Size
+    sigma: 0.45
+    heatmap_size: &hms 72 # Heatmap Size
     scaling: 1.0
 
 resume: ''

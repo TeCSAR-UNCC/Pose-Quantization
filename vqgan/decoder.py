@@ -42,7 +42,6 @@ class Decoder(nn.Module):
         num_residual_blocks: int = 3,
         dropout: float = 0.0,
         attention_resolution: list = [16],
-        
     ):
         super().__init__()
 
@@ -74,13 +73,15 @@ class Decoder(nn.Module):
         )
 
         # Loop over the intermediate channels
-        added_upsample = 0 
+        added_upsample = 0
         for n in range(len(intermediate_channels)):
             out_channels = intermediate_channels[n]
 
             # adding the residual blocks
             for _ in range(num_residual_blocks):
-                self.layers.append(ResidualBlock(in_channels, out_channels, dropout=dropout))
+                self.layers.append(
+                    ResidualBlock(in_channels, out_channels, dropout=dropout)
+                )
                 in_channels = out_channels
 
                 # adding the non local block
@@ -90,11 +91,14 @@ class Decoder(nn.Module):
             # Due to conv in first layer, do not upsample
             if n != 0 and added_upsample < upsample_layers:
 
-                self.layers.append(UpsampleBlock(in_channels=in_channels, 
-                                                   not_temporal=n > temporal_upsample_layers,
-                                                   reduce_temporal=reduce_temporal,
-                                                   n=n)
-                                                   )
+                self.layers.append(
+                    UpsampleBlock(
+                        in_channels=in_channels,
+                        not_temporal=n > temporal_upsample_layers,
+                        reduce_temporal=reduce_temporal,
+                        n=n,
+                    )
+                )
                 # self.layers.append(UpsampleBlock(in_channels=in_channels))
                 latent_size = latent_size * 2  # Upsample by a factor of 2
                 added_upsample += 1
@@ -113,5 +117,6 @@ class Decoder(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # for layer in self.layers:
-        #     x = layer(x)
-        return self.model(x) # x
+        #    x = layer(x)
+        #    print(x.shape)
+        return self.model(x)  # x

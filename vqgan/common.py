@@ -54,7 +54,9 @@ class ResidualBlock(nn.Module):
         dropout (float): Dropout probability.
     """
 
-    def __init__(self, in_channels:int, out_channels:int, dropout:float=0.0) -> None:
+    def __init__(
+        self, in_channels: int, out_channels: int, dropout: float = 0.0
+    ) -> None:
         super().__init__()
 
         self.in_channels = in_channels
@@ -96,14 +98,24 @@ class DownsampleBlock(nn.Module):
         in_channels (int): Number of channels in the input tensor.
     """
 
-    def __init__(self, in_channels:int, kernel_size=(3,3,3), stride=(2,2,2), padding=(0,0,0)) -> None:
+    def __init__(
+        self,
+        in_channels: int,
+        kernel_size=(3, 3, 3),
+        stride=(2, 2, 2),
+        padding=(0, 0, 0),
+    ) -> None:
         super().__init__()
 
         # (0, 1, 0, 1) - pad on left, right, top, bottom, front, back with respective size
         self.pad = nn.ConstantPad3d((0, 1, 0, 1, 0, 1), value=0)  # and fill value of 0
 
         self.conv = nn.Conv3d(
-            in_channels, in_channels, kernel_size=kernel_size, stride=stride, padding=padding
+            in_channels,
+            in_channels,
+            kernel_size=kernel_size,
+            stride=stride,
+            padding=padding,
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -112,31 +124,37 @@ class DownsampleBlock(nn.Module):
 
         return self.conv(x)
 
-    
+
 class UpsampleBlock(nn.Module):
     """
-    Upsample block for the decoder. interpolate -> conv 
+    Upsample block for the decoder. interpolate -> conv
 
     Args:
         in_channels (int): Number of channels in the input tensor.
     """
 
-    def __init__(self, in_channels:int, not_temporal:bool, reduce_temporal:bool, n:int) -> None:
+    def __init__(
+        self, in_channels: int, not_temporal: bool, reduce_temporal: bool, n: int
+    ) -> None:
         super().__init__()
-        kernel_size=(3,3,3)
-        stride=(1,1,1)
-        padding=(1,1,1)
-        self.scale_factor = (2.0, 2.0, 2.0) 
+        kernel_size = (3, 3, 3)
+        stride = (1, 1, 1)
+        padding = (1, 1, 1)
+        self.scale_factor = (2.0, 2.0, 2.0)
         if not_temporal:
-            self.scale_factor = (1.0, 2.0, 2.0) 
+            self.scale_factor = (1.0, 2.0, 2.0)
 
-        elif reduce_temporal: # Works only with F8 48 Frames
+        elif reduce_temporal:  # Works only with F8 48 Frames
             self.scale_factor = (4.0, 2.0, 2.0)
             if n == 3:
-                self.scale_factor = (3.0, 2.0, 2.0)
+                self.scale_factor = (3.0, 1.0, 1.0)
 
         self.conv = nn.Conv3d(
-            in_channels, in_channels, kernel_size=kernel_size, stride=stride, padding=padding
+            in_channels,
+            in_channels,
+            kernel_size=kernel_size,
+            stride=stride,
+            padding=padding,
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -166,7 +184,9 @@ class NonLocalBlock(nn.Module):
         self.k = nn.Conv3d(in_channels, in_channels, kernel_size=1, stride=1, padding=0)
         self.v = nn.Conv3d(in_channels, in_channels, kernel_size=1, stride=1, padding=0)
 
-        self.project_out = nn.Conv3d(in_channels, in_channels, kernel_size=1, stride=1, padding=0)
+        self.project_out = nn.Conv3d(
+            in_channels, in_channels, kernel_size=1, stride=1, padding=0
+        )
 
         self.softmax = nn.Softmax(dim=2)
 
@@ -191,7 +211,7 @@ class NonLocalBlock(nn.Module):
         q = q.permute(0, 2, 1)
 
         # Main attention formula
-        scores = torch.bmm(q, k) * (channels ** -0.5)
+        scores = torch.bmm(q, k) * (channels**-0.5)
         weights = self.softmax(scores)
         weights = weights.permute(0, 2, 1)
 

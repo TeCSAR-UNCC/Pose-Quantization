@@ -14,6 +14,7 @@ import torch.nn as nn
 from vqgan.common import DownsampleBlock, GroupNorm, NonLocalBlock, ResidualBlock, Swish
 from vqgan.unireplknet import UniRepLKNetBlock
 
+
 class Encoder(nn.Module):
     """
     The encoder part of the VQGAN.
@@ -40,7 +41,7 @@ class Encoder(nn.Module):
         downsample_layers: int = 3,
         temporal_downsample_layers: int = 3,
         reduce_temporal: bool = False,
-        num_unireplk_blocks: int = 0, 
+        num_unireplk_blocks: int = 0,
     ):
         super().__init__()
 
@@ -69,9 +70,13 @@ class Encoder(nn.Module):
             # Adding the residual blocks for each channel
             for _ in range(num_residual_blocks):
                 if in_channels == out_channels and n < num_unireplk_blocks:
-                    self.layers.append(UniRepLKNetBlock(in_channels=in_channels, kernel_size=13))
+                    self.layers.append(
+                        UniRepLKNetBlock(in_channels=in_channels, kernel_size=13)
+                    )
                 else:
-                    self.layers.append(ResidualBlock(in_channels, out_channels, dropout=dropout))
+                    self.layers.append(
+                        ResidualBlock(in_channels, out_channels, dropout=dropout)
+                    )
                     in_channels = out_channels
 
                 # Once we have downsampled the image to the size in attention resolution, we add attention blocks
@@ -79,27 +84,34 @@ class Encoder(nn.Module):
                     self.layers.append(NonLocalBlock(in_channels))
 
             # only downsample for the first n-2 layers, and decrease the input size by a factor of 2
-            if n < downsample_layers: # n != len(intermediate_channels) - 2:
-                
+            if n < downsample_layers:  # n != len(intermediate_channels) - 2:
+
                 kernel = (3, 3, 3)
                 stride = (2, 2, 2)
                 padding = (0, 0, 0)
 
-                if reduce_temporal:
+                if reduce_temporal and n < downsample_layers - 1:
                     kernel = (3, 3, 3)
                     stride = (4, 2, 2)
+                    padding = (0, 0, 0)
+                elif n == downsample_layers - 1:
+                    kernel = (3, 2, 2)
+                    stride = (4, 1, 1)
                     padding = (0, 0, 0)
 
                 # Adjust for temporal_downsample_layers
                 if n >= temporal_downsample_layers:
-                    kernel =  (kernel[0] - 1, *kernel[1:])
+                    kernel = (kernel[0] - 1, *kernel[1:])
                     stride = (stride[0] - 1, *stride[1:])
 
-                self.layers.append(DownsampleBlock(in_channels=intermediate_channels[n + 1], 
-                                                   kernel_size=kernel, 
-                                                   stride=stride, 
-                                                   padding=padding)
-                                                   )
+                self.layers.append(
+                    DownsampleBlock(
+                        in_channels=intermediate_channels[n + 1],
+                        kernel_size=kernel,
+                        stride=stride,
+                        padding=padding,
+                    )
+                )
                 image_size = image_size // 2  # Downsample by a factor of 2
 
         in_channels = intermediate_channels[-1]
@@ -125,4 +137,6 @@ class Encoder(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # for layer in self.layers:
         #     x = layer(x)
-        return self.model(x) #  x # (batch, 3, 64, 128, 128) -> (batch, 256, 8, 16, 16) -> b(batch, 2048, 8, 16, 16) -> (batch, 256, 8, 16, 16) -> (batch, 256, 64, 128, 128)
+        return self.model(
+            x
+        )  #  x # (batch, 3, 64, 128, 128) -> (batch, 256, 8, 16, 16) -> b(batch, 2048, 8, 16, 16) -> (batch, 256, 8, 16, 16) -> (batch, 256, 64, 128, 128)

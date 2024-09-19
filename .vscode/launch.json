@@ -30,7 +30,7 @@
       "program": "train.py",
       "console": "integratedTerminal",
       "env": {
-        "CUDA_VISIBLE_DEVICES": "0",
+        "CUDA_VISIBLE_DEVICES": "1",
         "WANDB_MODE": "offline"
       },
       "args": ["--cfg", "configs/c2d_2d_vqgan.yml"]
