@@ -2,8 +2,8 @@ compression_presets:
   F8: &F8
     compression: 'F8'
     upsample_layers: 3
-    downsample_layers: 3
-    temporal_downsample_layers: 3
+    downsample_layers: 2
+    temporal_downsample_layers: 2
     temporal_upsample_layers: 3
 
   F16: &F16
@@ -32,7 +32,7 @@ architecture:
     intermediate_channels: [64, 64, 128, 128, 256]
     num_residual_blocks_encoder: 2
     num_residual_blocks_decoder: 3
-    reduce_temporal: True # Only works with F8 48 Frame
+    reduce_temporal: False # Only works with F8 48 Frame
     <<: *F8
     dropout: 0.0
     attention_resolution: [16]
@@ -54,7 +54,7 @@ trainer:
 
 dataset:
   name: 'panoptic'
-  root: '/home/gmaldon2/panoptic-toolbox/data/'
+  root: '/mnt/DATASETS_RAID_28TB/panoptic-toolbox/data/'
   data_size: 300
   window_size: &dws 48 # Dataset Window Size
   frame_interval: 1
@@ -65,6 +65,7 @@ dataset:
   num_camera_selection: 1
   max_combine: false
   perspective_ego: true
+  batch_size: 8
 
   # Heatmap Generator
   hm2d: true
@@ -74,7 +75,7 @@ dataset:
     with_limb: true
     with_kp: false
     sigma: 0.75
-    heatmap_size: &hms 128 # Heatmap Size
+    heatmap_size: &hms 72 # Heatmap Size
     scaling: 1.0
 
 resume: ''
