@@ -11,7 +11,13 @@ According to the official implementation.
 import torch
 import torch.nn as nn
 
-from vqgan.common import GroupNorm, NonLocalBlock, ResidualBlock, Swish, UpsampleBlock
+from pose_quant.vqgan.common import (
+    GroupNorm,
+    NonLocalBlock,
+    ResidualBlock,
+    Swish,
+    UpsampleBlock,
+)
 
 
 class Decoder(nn.Module):

@@ -78,7 +78,7 @@ dataset:
     heatmap_size: &hms 72 # Heatmap Size
     scaling: 1.0
 
-resume: ''
+resume: '/home/mbaharan/project/Pose-Quantization/experiments/dutiful-pond-177/3dvqgan_e9_dutiful-pond-177.pt'
 
 
 # CUDA_VISIBLE_DEVICES=2 python train.py --cfg configs/c2d_2d_vqgan.yml

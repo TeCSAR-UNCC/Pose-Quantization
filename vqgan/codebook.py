@@ -59,7 +59,7 @@ class CodeBook(nn.Module):
         """
 
         # Channel to last dimension and copying the tensor to store it in a contiguous ( in a sequence ) way
-        z = z.permute(0, 2, 3, 4, 1).contiguous() # (1, 256, 4, 16, 16) original z
+        z = z.permute(0, 2, 3, 4, 1).contiguous()  # (1, 256, 4, 16, 16) original z
 
         z_flattened = z.view(
             -1, self.latent_dim
@@ -107,5 +107,9 @@ class CodeBook(nn.Module):
 
         # reshapring to the original shape
         z_q = z_q.permute(0, 4, 1, 2, 3)
+        batch_size, seq_len = z.shape[0], z.shape[-1]
+        min_distance_indices_in_batch_form = min_distance_indices.view(
+            batch_size, seq_len
+        )
 
-        return z_q, min_distance_indices, loss
+        return z_q, min_distance_indices, loss, min_distance_indices_in_batch_form

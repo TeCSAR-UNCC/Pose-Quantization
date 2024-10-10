@@ -11,8 +11,14 @@ According to the official implementation.
 import torch
 import torch.nn as nn
 
-from vqgan.common import DownsampleBlock, GroupNorm, NonLocalBlock, ResidualBlock, Swish
-from vqgan.unireplknet import UniRepLKNetBlock
+from pose_quant.vqgan.common import (
+    DownsampleBlock,
+    GroupNorm,
+    NonLocalBlock,
+    ResidualBlock,
+    Swish,
+)
+from pose_quant.vqgan.unireplknet import UniRepLKNetBlock
 
 
 class Encoder(nn.Module):

@@ -8,9 +8,9 @@ Implementing the main VQGAN, containing forward pass, lambda calculation, and to
 import torch
 import torch.nn as nn
 
-from vqgan import Encoder
-from vqgan import Decoder
-from vqgan import CodeBook
+from pose_quant.vqgan import Encoder
+from pose_quant.vqgan import Decoder
+from pose_quant.vqgan import CodeBook
 
 
 class VQGAN(nn.Module):
@@ -54,7 +54,7 @@ class VQGAN(nn.Module):
     ):
 
         super().__init__()
-        
+
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.discriminator_channels = discriminator_channels
@@ -65,7 +65,7 @@ class VQGAN(nn.Module):
             img_channels=in_channels,
             image_size=img_size,
             latent_channels=latent_channels,
-            intermediate_channels=intermediate_channels[:], # shallow copy of the link
+            intermediate_channels=intermediate_channels[:],  # shallow copy of the link
             num_residual_blocks=num_residual_blocks_encoder,
             dropout=dropout,
             attention_resolution=attention_resolution,
@@ -79,7 +79,7 @@ class VQGAN(nn.Module):
             img_channels=out_channels,
             latent_channels=latent_channels,
             latent_size=latent_size,
-            intermediate_channels=intermediate_channels[:], # shallow copy of the link
+            intermediate_channels=intermediate_channels[:],  # shallow copy of the link
             num_residual_blocks=num_residual_blocks_decoder,
             dropout=dropout,
             attention_resolution=attention_resolution,
@@ -109,7 +109,7 @@ class VQGAN(nn.Module):
         encoded_images = self.encoder(x)
         quant_x = self.quant_conv(encoded_images)
 
-        codebook_mapping, codebook_indices, codebook_loss = self.codebook(quant_x)
+        codebook_mapping, codebook_indices, codebook_loss, _ = self.codebook(quant_x)
 
         post_quant_x = self.post_quant_conv(codebook_mapping)
         decoded_images = self.decoder(post_quant_x)
@@ -121,9 +121,11 @@ class VQGAN(nn.Module):
         x = self.encoder(x)
         quant_x = self.quant_conv(x)
 
-        codebook_mapping, codebook_indices, q_loss = self.codebook(quant_x)
+        codebook_mapping, codebook_indices, q_loss, codebook_indices_batch = (
+            self.codebook(quant_x)
+        )
 
-        return codebook_mapping, codebook_indices, q_loss
+        return codebook_mapping, codebook_indices, q_loss, codebook_indices_batch
 
     def decode(self, x: torch.Tensor) -> torch.Tensor:
 
