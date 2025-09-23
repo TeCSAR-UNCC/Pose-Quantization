@@ -1,6 +1,6 @@
 # Adversarially-Refined VQ-GAN with Dense Motion Tokenization for Spatio-Temporal Heatmaps
 
-This repository contains the code and resources for the paper titled *"Adversarially-Refined VQ-GAN with Dense Motion Tokenization for Spatio-Temporal Heatmaps"*. The approach introduces a novel method of discretizing continuous human motion using a Vector Quantized Generative Adversarial Network (VQ-GAN) for accurate and efficient motion representation.
+This repository contains the code and resources for the paper titled *"Adversarially-Refined VQ-GAN with Dense Motion Tokenization for Spatio-Temporal Heatmaps"*, accepted for presentation at the International Conference on Machine Learning and Applications (ICMLA 2025). The approach introduces a novel method of discretizing continuous human motion using a Vector Quantized Generative Adversarial Network (VQ-GAN) for accurate and efficient motion representation.
 
 ## Table of Contents
 - [Overview](#overview)
