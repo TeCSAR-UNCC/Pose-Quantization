@@ -1,6 +1,6 @@
-# 3D Pose Quantization and Compression using VQ-GAN
+# Adversarially-Refined VQ-GAN with Dense Motion Tokenization for Spatio-Temporal Heatmaps
 
-This repository contains the code and resources for the paper titled *"Optimizing Human Motion Representation: Spatial-temporal Quantization and Compression with VQ-GANs"*. The approach introduces a novel method of discretizing continuous human motion using a Vector Quantized Generative Adversarial Network (VQ-GAN) for accurate and efficient motion representation.
+This repository contains the code and resources for the paper titled *"Adversarially-Refined VQ-GAN with Dense Motion Tokenization for Spatio-Temporal Heatmaps"*. The approach introduces a novel method of discretizing continuous human motion using a Vector Quantized Generative Adversarial Network (VQ-GAN) for accurate and efficient motion representation.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -134,13 +134,3 @@ python train.py --cfg configs/c2d_2d_vqgan.yml
 
 ## Citation
 
-Will be updated
-
-```bibtex
-@article{your_citation_here,
-  title={Optimizing Human Motion Representation: Spatial-temporal Quantization and Compression with VQ-GANs},
-  author={Anonymous},
-  journal={AAAI 2024},
-  year={2024}
-}
-```
