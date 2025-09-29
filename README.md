@@ -133,4 +133,13 @@ python train.py --cfg configs/c2d_2d_vqgan.yml
 ```
 
 ## Citation
+If you find our work useful, please consider citing:
+```bibtex
+@article{maldonado2025adversarially,
+  title={Adversarially-Refined VQ-GAN with Dense Motion Tokenization for Spatio-Temporal Heatmaps},
+  author={Maldonado, Gabriel and Rashvand, Narges and Pazho, Armin Danesh and Noghre, Ghazal Alinezhad and Katariya, Vinit and Tabkhi, Hamed},
+  journal={arXiv preprint arXiv:2509.19252},
+  year={2025}
+}
+```
 
